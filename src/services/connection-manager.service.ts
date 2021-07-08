@@ -1,6 +1,8 @@
 /* eslint-disable prettier/prettier */
 
+import { join } from "path";
 import { Connection, createConnection } from "typeorm";
+import { configService } from "../config/bdconfig";
 
 export class ConnectionManager {
 
@@ -8,28 +10,7 @@ export class ConnectionManager {
     private connection: Connection;
 
     private async createCDSConnection(){
-        await createConnection().then((value) => {
-            this.connection = value;
-            console.log("Database connection Open!!!");
-        }).catch((error) => {
-            console.log(error);
-            
-        });
-    }
-
-    public static async getInstance(): Promise<ConnectionManager>{
-        if (!ConnectionManager.instance){
-            ConnectionManager.instance = new ConnectionManager();
-            await ConnectionManager.instance.createCDSConnection().then(() => {
-                return ConnectionManager.instance;
-            })
-        } else {
-            return ConnectionManager.instance;
-        }
-    }
-
-    public getConnection(): Connection {
-        console.log(this.connection);
-        return this.connection;
+        //console.log(join(__dirname, '../**/*.entity{.ts,.js}'));
+        
     }
 }

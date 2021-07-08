@@ -7,6 +7,8 @@ export class AppController {
 
   @Get()
   getHello(): string {
+    const contenedores = this.appService.getAll();
+    console.log(contenedores);
     return this.appService.getHello();
   }
 }

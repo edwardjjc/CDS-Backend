@@ -2,7 +2,7 @@
 import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { DispositivosIoT } from './dispositivos-iot.entity';
-import { RutasContenedores } from './rutas-contenedores.entitiy';
+import { RutasContenedores } from './rutas-contenedores.entity';
 import { TiposContenedores } from './tipos-contenedores.entity';
 
 @Entity({ name: 'contenedores' })

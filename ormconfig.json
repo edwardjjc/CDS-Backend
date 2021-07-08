@@ -9,12 +9,12 @@
     "logging": false,
     "migrationsRun": false,
     "entities": [
-        "dist/entities/**/*.js"
+        "./entities/**/*.js"
     ],
     "migrations": [
-        "dist/migrations/**/*.js"
+        "../../dist/migrations/**/*.js"
     ],
     "subscribers": [
-        "dist/subscribers/**/*.js"
+        "../../dist/subscribers/**/*.js"
     ]
 }
