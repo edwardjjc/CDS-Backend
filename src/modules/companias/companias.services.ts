@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Companias } from "src/entities/companias.entity";
 import { BadRequestError, NotFoundError } from "src/models/error";
-import { AddCompania, UpdateCompania } from "src/models/request/companias";
+import { AddCompania, UpdateCompania } from "src/modules/companias/dto";
 import { ObjectID, Repository } from "typeorm";
 
 @Injectable()

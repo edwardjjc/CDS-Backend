@@ -15,7 +15,7 @@ export class TiposContenedores extends BaseEntity {
   @Column({ type: 'varchar', length: 300 })
   dimensiones: string;
 
-  @Column()
+  @Column({ type: 'decimal' })
   cantidadMetros: number;
   
 }

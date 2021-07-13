@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { TiposCamiones } from "src/entities/tipos-camiones.entity";
 import { BadRequestError, NotFoundError } from "src/models/error";
-import { AddTipoCamion, UpdateTipoCamion } from "src/models/request/tipos-camiones";
+import { AddTipoCamion, UpdateTipoCamion } from "src/modules/tipos-camiones/dto";
 import { Repository } from "typeorm";
 
 @Injectable()

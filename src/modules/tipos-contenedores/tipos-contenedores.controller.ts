@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
-import { AddTipoCamion, UpdateTipoCamion } from "src/models/request/tipos-camiones";
 import { BaseResponse } from "src/models/response/base.response";
-import { TiposCamionesServices } from "src/services/tipos-camiones.services";
+import { AddTipoContenedor, UpdateTipoContenedor } from "./dto";
+import { TiposContenedoresServices } from "./tipos-contenedores.services";
 
-@Controller('tipos-camiones')
-export class TiposCamionesController {
-    constructor(private readonly tiposCamionesService: TiposCamionesServices) {}
+@Controller('tipos-contenedores')
+export class TiposContenedoresController {
+    constructor(private readonly tiposContenedoresService: TiposContenedoresServices) {}
 
     @Get()
     async getAll(): Promise<BaseResponse> {
@@ -13,7 +13,7 @@ export class TiposCamionesController {
         try{
             response.status = 'success';
             response.message = '';
-            response.data =  await this.tiposCamionesService.getAll()
+            response.data =  await this.tiposContenedoresService.getAll()
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -27,7 +27,7 @@ export class TiposCamionesController {
         try {
             response.status = 'success';
             response.message = '';
-            response.data =  await this.tiposCamionesService.getById(id);
+            response.data =  await this.tiposContenedoresService.getById(id);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -36,12 +36,12 @@ export class TiposCamionesController {
     }
 
     @Post()
-    async create(@Body() addTipoCamion: AddTipoCamion): Promise<BaseResponse> {
+    async create(@Body() addTipoContenedor: AddTipoContenedor): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
             response.status = 'success';
             response.message = '';
-            response.data = await this.tiposCamionesService.insert(addTipoCamion);
+            response.data = await this.tiposContenedoresService.insert(addTipoContenedor);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -50,12 +50,12 @@ export class TiposCamionesController {
     }
 
     @Put(':id')
-    async update(@Param('id') id: string, @Body() updateTipoCamion: UpdateTipoCamion): Promise<BaseResponse> {
+    async update(@Param('id') id: string, @Body() updateTipoContenedor: UpdateTipoContenedor): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
             response.status = 'success';
             response.message = '';
-            response.data = this.tiposCamionesService.update(id, updateTipoCamion);
+            response.data = this.tiposContenedoresService.update(id, updateTipoContenedor);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -69,7 +69,7 @@ export class TiposCamionesController {
         try {
             response.status = 'success';
             response.message = '';
-            response.data = this.tiposCamionesService.remove(id)
+            response.data = this.tiposContenedoresService.remove(id)
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
