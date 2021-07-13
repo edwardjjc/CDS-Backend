@@ -12,7 +12,7 @@ export class TiposCamiones extends BaseEntity {
   @Column({ type: 'varchar', length: 300 })
   descripcion: string;
 
-  @Column()
+  @Column({ type: 'decimal' })
   cantidadMetros: number;
   
 }

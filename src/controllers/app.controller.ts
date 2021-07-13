@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { AppService } from '../services/app.service';
 
 @Controller()
@@ -7,8 +7,13 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    const contenedores = this.appService.getAll();
-    console.log(contenedores);
     return this.appService.getHello();
+  }
+  
+  @Get('test')
+  test(@Query() query): string {
+    console.log("Lid is open?: ", query.isOpen);
+    console.log("Module: ", query.moduleId);
+    return "Success";
   }
 }
