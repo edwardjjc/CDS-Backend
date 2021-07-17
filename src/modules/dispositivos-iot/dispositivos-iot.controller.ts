@@ -1,17 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
-import { AddCompania, UpdateCompania } from "src/modules/companias/dto";
 import { BaseResponse } from "src/models/response/base.response";
-import { CompaniasServices } from "src/modules/companias/companias.services";
+import { DispositivosIoTServices } from "./dispositivos-iot.services";
+import { AddDispositivoIoT, UpdateDispositivoIoT } from "./dto";
 
-@Controller('compania')
-export class CompaniasController {
-    constructor(private readonly companiaService: CompaniasServices) {}
-
-    @Get('test')
-    async test(@Query() query){
-        console.log(`No Serie recibido ${query.noSerie} y Lectura recibida ${query.lectura}`)
-        return 'OK';
-    }
+@Controller('dispositivos-iot')
+export class DispositivosIoTController {
+    constructor(private readonly dispositivosIoTService: DispositivosIoTServices) {}
 
     @Get()
     async getAll(): Promise<BaseResponse> {
@@ -19,7 +13,7 @@ export class CompaniasController {
         try{
             response.status = 'success';
             response.message = '';
-            response.data =  await this.companiaService.getAll()
+            response.data =  await this.dispositivosIoTService.getAll()
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -33,7 +27,7 @@ export class CompaniasController {
         try {
             response.status = 'success';
             response.message = '';
-            response.data =  await this.companiaService.getById(id);
+            response.data =  await this.dispositivosIoTService.getById(id);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -42,12 +36,12 @@ export class CompaniasController {
     }
 
     @Post()
-    async create(@Body() addCompania: AddCompania): Promise<BaseResponse> {
+    async create(@Body() addDispositivoIoT: AddDispositivoIoT): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
             response.status = 'success';
             response.message = '';
-            response.data = await this.companiaService.insert(addCompania)
+            response.data = await this.dispositivosIoTService.insert(addDispositivoIoT)
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -56,12 +50,12 @@ export class CompaniasController {
     }
 
     @Put(':id')
-    async update(@Param('id') id: string, @Body() updateCompania: UpdateCompania): Promise<BaseResponse> {
+    async update(@Param('id') id: string, @Body() updateDispositivoIoT: UpdateDispositivoIoT): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
             response.status = 'success';
             response.message = '';
-            response.data = this.companiaService.update(id, updateCompania);
+            response.data = this.dispositivosIoTService.update(id, updateDispositivoIoT);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -75,7 +69,7 @@ export class CompaniasController {
         try {
             response.status = 'success';
             response.message = '';
-            response.data = this.companiaService.remove(id)
+            response.data = this.dispositivosIoTService.remove(id)
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;

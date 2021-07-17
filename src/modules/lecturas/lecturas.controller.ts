@@ -1,17 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
-import { AddCompania, UpdateCompania } from "src/modules/companias/dto";
 import { BaseResponse } from "src/models/response/base.response";
-import { CompaniasServices } from "src/modules/companias/companias.services";
+import { LecturasServices } from "./lecturas.services";
+import { AddLectura } from "./dto";
 
-@Controller('compania')
-export class CompaniasController {
-    constructor(private readonly companiaService: CompaniasServices) {}
-
-    @Get('test')
-    async test(@Query() query){
-        console.log(`No Serie recibido ${query.noSerie} y Lectura recibida ${query.lectura}`)
-        return 'OK';
-    }
+@Controller('lecturas')
+export class LecturasController {
+    constructor(private readonly lecturasService: LecturasServices) {}
 
     @Get()
     async getAll(): Promise<BaseResponse> {
@@ -19,7 +13,7 @@ export class CompaniasController {
         try{
             response.status = 'success';
             response.message = '';
-            response.data =  await this.companiaService.getAll()
+            response.data =  await this.lecturasService.getAll()
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -33,7 +27,7 @@ export class CompaniasController {
         try {
             response.status = 'success';
             response.message = '';
-            response.data =  await this.companiaService.getById(id);
+            response.data =  await this.lecturasService.getById(id);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -42,26 +36,12 @@ export class CompaniasController {
     }
 
     @Post()
-    async create(@Body() addCompania: AddCompania): Promise<BaseResponse> {
+    async create(@Body() addLectura: AddLectura): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
             response.status = 'success';
             response.message = '';
-            response.data = await this.companiaService.insert(addCompania)
-        } catch (error) {
-            response.status = 'fail';
-            response.message = error.message;
-        }
-        return response;
-    }
-
-    @Put(':id')
-    async update(@Param('id') id: string, @Body() updateCompania: UpdateCompania): Promise<BaseResponse> {
-        let response: BaseResponse = new BaseResponse;
-        try {
-            response.status = 'success';
-            response.message = '';
-            response.data = this.companiaService.update(id, updateCompania);
+            response.data = await this.lecturasService.insert(addLectura)
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -75,7 +55,7 @@ export class CompaniasController {
         try {
             response.status = 'success';
             response.message = '';
-            response.data = this.companiaService.remove(id)
+            response.data = this.lecturasService.remove(id)
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;

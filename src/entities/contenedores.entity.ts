@@ -23,10 +23,10 @@ export class Contenedores extends BaseEntity {
   @Column({ type: 'varchar', length: 300 })
   direccion: string;
 
-  @Column()
+  @Column({ type: 'decimal', nullable: true })
   gpsLatitude: number;
 
-  @Column()
+  @Column({ type: 'decimal', nullable: true })
   gpsAltitude: number;
   
 }

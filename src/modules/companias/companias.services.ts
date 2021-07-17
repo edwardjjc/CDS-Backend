@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Companias } from "src/entities/companias.entity";
 import { BadRequestError, NotFoundError } from "src/models/error";
 import { AddCompania, UpdateCompania } from "src/modules/companias/dto";
-import { ObjectID, Repository } from "typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class CompaniasServices {

@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configService } from './config/bdconfig';
-import { CompaniasModule, TiposCamionesModule, TiposContenedoresModule, TiposSensoresModule } from './modules';
+import { CompaniasModule, ContenedoresModule, DispositivosIoTModule, LecturasModule, 
+  TiposCamionesModule, TiposContenedoresModule, TiposSensoresModule } from './modules';
 
 @Module({
   imports: [
@@ -9,7 +10,10 @@ import { CompaniasModule, TiposCamionesModule, TiposContenedoresModule, TiposSen
     CompaniasModule, 
     TiposCamionesModule, 
     TiposContenedoresModule,
-    TiposSensoresModule
+    TiposSensoresModule,
+    ContenedoresModule,
+    DispositivosIoTModule,
+    LecturasModule
   ],
   controllers: [],
   providers: [],

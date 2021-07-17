@@ -13,7 +13,7 @@ export class Lecturas extends BaseEntity {
   @ManyToOne(() => TiposSensores, tipoSensor => tipoSensor.lecturas)
   tipoSensor: TiposSensores;
   
-  @Column()
+  @Column({ type: 'decimal' })
   lectura: number;
   
 }
