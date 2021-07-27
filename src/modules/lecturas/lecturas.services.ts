@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Lecturas } from "src/entities";
+import { DispositivosIoT, Lecturas, TiposSensores } from "src/entities";
 import { BadRequestError, NotFoundError } from "src/models/error";
 import { Repository } from "typeorm";
 import { AddLectura } from "./dto";
@@ -8,7 +8,9 @@ import { AddLectura } from "./dto";
 @Injectable()
 export class LecturasServices {
     
-    constructor(@InjectRepository(Lecturas) private readonly _repo: Repository<Lecturas>) {}
+    constructor(@InjectRepository(Lecturas) private readonly _repo: Repository<Lecturas>, 
+                @InjectRepository(DispositivosIoT) private readonly diotRepo: Repository<DispositivosIoT>,
+                @InjectRepository(TiposSensores) private readonly tsRepo: Repository<TiposSensores>) {}
 
     async getAll(): Promise<Lecturas[]> {
         try {
@@ -38,6 +40,8 @@ export class LecturasServices {
             }
             let lectura: Lecturas = new Lecturas();
             Object.assign(lectura, addLectura);
+            lectura.dispositivoIoT = await this.diotRepo.findOne({ where: { noSerie: addLectura.noSerie } });
+            lectura.tipoSensor = await this.tsRepo.findOne({ where: { descripcion: addLectura.tipoSensor } });
             return this._repo.save(lectura);
         } catch (error) {
             console.log(error);

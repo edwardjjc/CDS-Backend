@@ -4,7 +4,7 @@ import { BaseEntity } from './base.entity';
 import { Contenedores } from './contenedores.entity';
 import { Lecturas } from './lecturas.entity';
 
-@Entity({ name: 'dispotivos_iot' })
+@Entity({ name: 'dispositivos_iot' })
 export class DispositivosIoT extends BaseEntity {
 
   @OneToMany(() => Lecturas, lecturas => lecturas.dispositivoIoT)

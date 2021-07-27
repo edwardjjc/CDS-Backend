@@ -29,7 +29,7 @@ export class Camiones extends BaseEntity {
   @Column({ type: 'varchar', length: 50 })
   modelo: string;
 
-  @Column()
+  @Column({ type: 'int' })
   anio: number;
 
   @Column({ type: 'varchar', length: 50 })
