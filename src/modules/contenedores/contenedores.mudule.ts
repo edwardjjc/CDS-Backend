@@ -1,12 +1,14 @@
+import { HttpModule } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Contenedores } from "src/entities";
+import { Contenedores, DistanciasContenedores } from "src/entities";
+import { DistanciaContenedoresServices } from "../distancias-contenedores/distancias-contenedores.services";
 import { ContenedoresController } from "./contenedores.controller";
 import { ContenedoresServices } from "./contenedores.services";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Contenedores])],
+    imports: [TypeOrmModule.forFeature([Contenedores, DistanciasContenedores]), HttpModule],
     controllers: [ContenedoresController],
-    providers: [ContenedoresServices],
+    providers: [ContenedoresServices, DistanciaContenedoresServices],
 })
 export class ContenedoresModule {}

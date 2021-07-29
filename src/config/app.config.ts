@@ -1,6 +1,7 @@
 // src/config/config.service.ts
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { join } from 'path';
+import { GoogleApi } from 'src/models/config/google-api.model';
 
 require('dotenv').config();
 
@@ -32,7 +33,6 @@ class ConfigService {
   }
 
   public getTypeOrmConfig(): TypeOrmModuleOptions {
-    console.log(join(__dirname, '/../entities/**/*.entity{.ts,.js}'))
     return {
       type: 'postgres',
 
@@ -57,6 +57,14 @@ class ConfigService {
     };
   }
 
+  public getGoogleApiConfig(): GoogleApi {
+    return {
+      apiKey: this.getValue('GOOGLE_API_KEY'),
+      distanceApi: this.getValue('GOOGLE_DISTANCE_API'),
+      geolocationApi: this.getValue('GOOGLE_GEOLOCATION_API')
+    };
+  }
+
 }
 
 const configService = new ConfigService(process.env)
@@ -65,7 +73,10 @@ const configService = new ConfigService(process.env)
     'POSTGRES_PORT',
     'POSTGRES_USER',
     'POSTGRES_PASSWORD',
-    'POSTGRES_DATABASE'
+    'POSTGRES_DATABASE',
+    'GOOGLE_API_KEY',
+    'GOOGLE_DISTANCE_API',
+    'GOOGLE_GEOLOCATION_API'
   ]);
 
 export { configService };

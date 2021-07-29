@@ -1,11 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { BaseResponse } from "src/models/response/base.response";
+import { DistanciaContenedoresServices } from "../distancias-contenedores/distancias-contenedores.services";
 import { ContenedoresServices } from "./contenedores.services";
 import { AddContenedor, UpdateContenedor } from "./dto";
 
 @Controller('contenedores')
 export class ContenedoresController {
-    constructor(private readonly contenedoresService: ContenedoresServices) {}
+    constructor(private readonly contenedoresService: ContenedoresServices,
+                private readonly distanciaContenedoresService: DistanciaContenedoresServices) {}
 
     @Get()
     async getAll(): Promise<BaseResponse> {
@@ -33,6 +35,22 @@ export class ContenedoresController {
             response.message = error.message;
         }
         return response;
+    }
+
+    @Post('fill-distances')
+    async fillDistances(): Promise<BaseResponse> {
+        let response: BaseResponse = new BaseResponse();
+        try {
+            await this.distanciaContenedoresService.removeAll();
+            await this.distanciaContenedoresService.fill();
+            response.status = 'success';
+            response.message = '';
+            response.data = await this.distanciaContenedoresService.getDistanceMatrix();
+        } catch (error) {
+            response.status = 'fail';
+            response.message = error.message;
+        }
+        return response
     }
 
     @Post()

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { configService } from './config/bdconfig';
+import { configService } from './config/app.config';
 import { CompaniasModule, ContenedoresModule, DispositivosIoTModule, LecturasModule, 
   TiposCamionesModule, TiposContenedoresModule, TiposSensoresModule } from './modules';
 

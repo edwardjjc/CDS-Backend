@@ -12,5 +12,8 @@ export class RutasContenedores extends BaseEntity {
 
   @ManyToOne(() => Contenedores, contenedores => contenedores.rutasContenedores)
   contenedor: Contenedores;
-  
+
+  @Column({ type: "int" })
+  orden: number;
+
 }

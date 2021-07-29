@@ -6,3 +6,6 @@
 
 #Variables de entorno
 .env
+
+#Documentos de apoyo
+/docs

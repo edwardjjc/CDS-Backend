@@ -2,6 +2,7 @@
 import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { DispositivosIoT } from './dispositivos-iot.entity';
+import { DistanciasContenedores } from './distancias-contenedores.entity';
 import { RutasContenedores } from './rutas-contenedores.entity';
 import { TiposContenedores } from './tipos-contenedores.entity';
 
@@ -16,6 +17,12 @@ export class Contenedores extends BaseEntity {
 
   @OneToMany(() => RutasContenedores, rutasContenedeores => rutasContenedeores.contenedor)
   rutasContenedores: RutasContenedores[];
+
+  @OneToMany(() => DistanciasContenedores, distanciasContenedoresOrigen => distanciasContenedoresOrigen.contenedorOrigen)
+  distanciasContenedoresOrigen: DistanciasContenedores[];
+
+  @OneToMany(() => DistanciasContenedores, distanciasContenedoresDestino => distanciasContenedoresDestino.contenedorDestino)
+  distanciasContenedoresDestino: DistanciasContenedores[];
 
   @Column({ type: 'varchar', length: 300 })
   descripcion: string;
