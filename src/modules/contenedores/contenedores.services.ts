@@ -60,13 +60,14 @@ export class ContenedoresServices {
         }
     }
 
-    async remove(id: string): Promise<Contenedores>{
+    async remove(id: string, username: string): Promise<Contenedores>{
         try {
             let contenedor: Contenedores =  await this._repo.findOne(id);
             if(!contenedor) {
                 throw new NotFoundError(`The object with id ${id} was not found`);
             }
             contenedor.isActive = false;
+            contenedor.lastChangedBy = username;
             return this._repo.save(contenedor);
         } catch (error) {
             console.log(error);

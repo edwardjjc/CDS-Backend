@@ -60,13 +60,14 @@ export class TiposContenedoresServices {
         }
     }
 
-    async remove(id: string): Promise<TiposContenedores>{
+    async remove(id: string, username: string): Promise<TiposContenedores>{
         try {
             let tipoContenedor: TiposContenedores =  await this._repo.findOne(id);
             if(!tipoContenedor) {
                 throw new NotFoundError(`The object with id ${id} was not found`);
             }
             tipoContenedor.isActive = false;
+            tipoContenedor.lastChangedBy = username;
             return this._repo.save(tipoContenedor);
         } catch (error) {
             console.log(error);

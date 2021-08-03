@@ -60,13 +60,14 @@ export class TiposSensoresServices {
         }
     }
 
-    async remove(id: string): Promise<TiposSensores>{
+    async remove(id: string, username: string): Promise<TiposSensores>{
         try {
             let tipoSensor: TiposSensores =  await this._repo.findOne(id);
             if(!tipoSensor) {
                 throw new NotFoundError(`The object with id ${id} was not found`);
             }
             tipoSensor.isActive = false;
+            tipoSensor.lastChangedBy = username;
             return this._repo.save(tipoSensor);
         } catch (error) {
             console.log(error);

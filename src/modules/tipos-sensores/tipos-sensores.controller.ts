@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Req } from "@nestjs/common";
+import { Request } from "express";
 import { BaseResponse } from "src/models/response/base.response";
 import { AddTipoSensor, UpdateTipoSensor } from "./dto";
 import { TiposSensoresServices } from "./tipos-sensores.services";
@@ -36,9 +37,11 @@ export class TiposSensoresController {
     }
 
     @Post()
-    async create(@Body() addTipoSensor: AddTipoSensor): Promise<BaseResponse> {
+    async create(@Body() addTipoSensor: AddTipoSensor, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
+            const security = req.body.security;
+            addTipoSensor.createdBy = security.username;
             response.status = 'success';
             response.message = '';
             response.data = await this.tiposSensoresService.insert(addTipoSensor);
@@ -50,12 +53,14 @@ export class TiposSensoresController {
     }
 
     @Put(':id')
-    async update(@Param('id') id: string, @Body() updateTipoSensor: UpdateTipoSensor): Promise<BaseResponse> {
+    async update(@Param('id') id: string, @Body() updateTipoSensor: UpdateTipoSensor, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
+            const security = req.body.security;
+            updateTipoSensor.lastChangedBy = security.username;
             response.status = 'success';
             response.message = '';
-            response.data = this.tiposSensoresService.update(id, updateTipoSensor);
+            response.data = await this.tiposSensoresService.update(id, updateTipoSensor);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -64,12 +69,13 @@ export class TiposSensoresController {
     }
 
     @Delete(':id')
-    async remove(@Param('id') id: string): Promise<BaseResponse> {
+    async remove(@Param('id') id: string, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
+            const security = req.body.security;
             response.status = 'success';
             response.message = '';
-            response.data = this.tiposSensoresService.remove(id)
+            response.data = await this.tiposSensoresService.remove(id, security.username);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;

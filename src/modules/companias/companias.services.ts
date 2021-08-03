@@ -60,13 +60,14 @@ export class CompaniasServices {
         }
     }
 
-    async remove(id: string): Promise<Companias>{
+    async remove(id: string, username: string): Promise<Companias>{
         try {
             let compania: Companias =  await this._repo.findOne(id);
             if(!compania) {
                 throw new NotFoundError(`The object with id ${id} was not found`);
             }
             compania.isActive = false;
+            compania.lastChangedBy = username;
             return this._repo.save(compania);
         } catch (error) {
             console.log(error);

@@ -1,12 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Req } from "@nestjs/common";
 import { Request } from "express";
 import { BaseResponse } from "src/models/response/base.response";
-import { AddTipoContenedor, UpdateTipoContenedor } from "./dto";
-import { TiposContenedoresServices } from "./tipos-contenedores.services";
+import { AddUsuario } from "./dto";
+import { UsuariosServices } from "./usuarios.services";
 
-@Controller('tipos-contenedores')
-export class TiposContenedoresController {
-    constructor(private readonly tiposContenedoresService: TiposContenedoresServices) {}
+@Controller('usuarios')
+export class UsuariosController {
+    constructor(private readonly usuariosService: UsuariosServices) {}
 
     @Get()
     async getAll(): Promise<BaseResponse> {
@@ -14,7 +14,7 @@ export class TiposContenedoresController {
         try{
             response.status = 'success';
             response.message = '';
-            response.data =  await this.tiposContenedoresService.getAll()
+            response.data =  await this.usuariosService.getAll()
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -28,7 +28,7 @@ export class TiposContenedoresController {
         try {
             response.status = 'success';
             response.message = '';
-            response.data =  await this.tiposContenedoresService.getById(id);
+            response.data =  await this.usuariosService.getById(id);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -37,30 +37,14 @@ export class TiposContenedoresController {
     }
 
     @Post()
-    async create(@Body() addTipoContenedor: AddTipoContenedor, @Req() req: Request): Promise<BaseResponse> {
+    async create(@Body() addUsuario: AddUsuario, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
             const security = req.body.security;
-            addTipoContenedor.createdBy = security.username;
+            addUsuario.createdBy = security.username;
             response.status = 'success';
             response.message = '';
-            response.data = await this.tiposContenedoresService.insert(addTipoContenedor);
-        } catch (error) {
-            response.status = 'fail';
-            response.message = error.message;
-        }
-        return response;
-    }
-
-    @Put(':id')
-    async update(@Param('id') id: string, @Body() updateTipoContenedor: UpdateTipoContenedor, @Req() req: Request): Promise<BaseResponse> {
-        let response: BaseResponse = new BaseResponse;
-        try {
-            const security = req.body.security;
-            updateTipoContenedor.lastChangedBy = security.username;
-            response.status = 'success';
-            response.message = '';
-            response.data = await this.tiposContenedoresService.update(id, updateTipoContenedor);
+            response.data = await this.usuariosService.insert(addUsuario);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -75,7 +59,7 @@ export class TiposContenedoresController {
             const security = req.body.security;
             response.status = 'success';
             response.message = '';
-            response.data = await this.tiposContenedoresService.remove(id, security.username);
+            response.data = await this.usuariosService.remove(id, security.username);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;

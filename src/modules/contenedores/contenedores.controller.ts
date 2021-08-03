@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from "@nestjs/common";
+import { Request } from "express";
 import { BaseResponse } from "src/models/response/base.response";
 import { DistanciaContenedoresServices } from "../distancias-contenedores/distancias-contenedores.services";
 import { ContenedoresServices } from "./contenedores.services";
@@ -54,9 +55,11 @@ export class ContenedoresController {
     }
 
     @Post()
-    async create(@Body() addContenedor: AddContenedor): Promise<BaseResponse> {
+    async create(@Body() addContenedor: AddContenedor, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
+            const security = req.body.security;
+            addContenedor.createdBy = security.username;
             response.status = 'success';
             response.message = '';
             response.data = await this.contenedoresService.insert(addContenedor)
@@ -68,12 +71,14 @@ export class ContenedoresController {
     }
 
     @Put(':id')
-    async update(@Param('id') id: string, @Body() updateContenedor: UpdateContenedor): Promise<BaseResponse> {
+    async update(@Param('id') id: string, @Body() updateContenedor: UpdateContenedor, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
+            const security = req.body.security;
+            updateContenedor.lastChangedBy = security.username;
             response.status = 'success';
             response.message = '';
-            response.data = this.contenedoresService.update(id, updateContenedor);
+            response.data = await this.contenedoresService.update(id, updateContenedor);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -82,12 +87,13 @@ export class ContenedoresController {
     }
 
     @Delete(':id')
-    async remove(@Param('id') id: string): Promise<BaseResponse> {
+    async remove(@Param('id') id: string, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
+            const security = req.body.security;
             response.status = 'success';
             response.message = '';
-            response.data = this.contenedoresService.remove(id)
+            response.data = await this.contenedoresService.remove(id, security.username);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;

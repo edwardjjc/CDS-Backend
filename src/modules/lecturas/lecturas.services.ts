@@ -49,13 +49,14 @@ export class LecturasServices {
         }
     }
 
-    async remove(id: string): Promise<Lecturas>{
+    async remove(id: string, username: string): Promise<Lecturas>{
         try {
             let lectura: Lecturas =  await this._repo.findOne(id);
             if(!lectura) {
                 throw new NotFoundError(`The object with id ${id} was not found`);
             }
             lectura.isActive = false;
+            lectura.lastChangedBy = username;
             return this._repo.save(lectura);
         } catch (error) {
             console.log(error);

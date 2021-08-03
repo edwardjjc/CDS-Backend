@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from "@nestjs/common";
+import { Request } from "express";
 import { AddCompania, UpdateCompania } from "src/modules/companias/dto";
 import { BaseResponse } from "src/models/response/base.response";
 import { CompaniasServices } from "src/modules/companias/companias.services";
@@ -42,9 +43,11 @@ export class CompaniasController {
     }
 
     @Post()
-    async create(@Body() addCompania: AddCompania): Promise<BaseResponse> {
+    async create(@Body() addCompania: AddCompania, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
+            let security = req.body.security;
+            addCompania.createdBy = security.username;
             response.status = 'success';
             response.message = '';
             response.data = await this.companiaService.insert(addCompania)
@@ -56,12 +59,14 @@ export class CompaniasController {
     }
 
     @Put(':id')
-    async update(@Param('id') id: string, @Body() updateCompania: UpdateCompania): Promise<BaseResponse> {
+    async update(@Param('id') id: string, @Body() updateCompania: UpdateCompania, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
+            let security = req.body.security;
+            updateCompania.lastChangedBy = security.username;
             response.status = 'success';
             response.message = '';
-            response.data = this.companiaService.update(id, updateCompania);
+            response.data = await this.companiaService.update(id, updateCompania);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -70,12 +75,13 @@ export class CompaniasController {
     }
 
     @Delete(':id')
-    async remove(@Param('id') id: string): Promise<BaseResponse> {
+    async remove(@Param('id') id: string, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
+            const security = req.body.security;
             response.status = 'success';
             response.message = '';
-            response.data = this.companiaService.remove(id)
+            response.data = await this.companiaService.remove(id, security.username);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;

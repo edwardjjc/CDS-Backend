@@ -6,4 +6,6 @@ export class AddDistanciaContenedor extends BaseAddRequest {
     contenedorDestino: Contenedores;
     distancia?: number;
     distanciaStr?: string;
+    duracion?: number;
+    duracionStr?: string;
 }

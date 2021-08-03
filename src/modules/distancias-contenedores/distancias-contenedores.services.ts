@@ -1,12 +1,10 @@
-import * as fs from 'fs';
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Contenedores, DistanciasContenedores } from "src/entities";
 import { Repository } from "typeorm";
 import { AddDistanciaContenedor } from "./dto/add-distancia-contenedor.request";
-import { join } from 'path';
 import { GoogleDistanceApiResponse } from './dto/google-distance-api.response';
-import { GoogleApi } from 'src/models/config/google-api.model';
+import { GoogleApi } from 'src/models/config/google-api.request';
 import { configService } from 'src/config/app.config';
 import { HttpService } from '@nestjs/axios';
 
@@ -41,7 +39,7 @@ export class DistanciaContenedoresServices {
                     row = [];
                     origenActual = distanciaContenedor.contenedorOrigen.id;
                 }
-                row.push(distanciaContenedor.distancia);
+                row.push(distanciaContenedor.duracion);
                 if(i == distanciasContenedores.length -1){
                     result.push(row);
                 }
@@ -66,12 +64,10 @@ export class DistanciaContenedoresServices {
                 for (let j = 0; j < contenedores.length; j++) {
                     let contenedorDestino = contenedores[j];
                     let distanciaContenedorDTO: AddDistanciaContenedor = new AddDistanciaContenedor();
-                    distanciaContenedorDTO.createdBy = "System";
-                    distanciaContenedorDTO.lastChangedBy= "System";
+                    distanciaContenedorDTO.createdBy = "admin";
+                    distanciaContenedorDTO.lastChangedBy= "admin";
                     distanciaContenedorDTO.contenedorOrigen = contenedorOrigen;
                     distanciaContenedorDTO.contenedorDestino = contenedorDestino;
-                    //distanciaContenedorDTO.distancia = contenedorOrigen.id === contenedorDestino.id ? 0.0 : Math.random() * 100;
-                    //distanciaContenedorDTO.distanciaStr = contenedorOrigen.id === contenedorDestino.id ? "0 KM" : "1 KM";
 
                     let distanciaContenedor: DistanciasContenedores = new DistanciasContenedores();
                     Object.assign(distanciaContenedor, distanciaContenedorDTO)
@@ -86,7 +82,7 @@ export class DistanciaContenedoresServices {
             
             if (response.status == 200) {
                 googleDistanceResponse = response.data;
-                console.log(googleDistanceResponse)
+                
                 for (let c = 0; c < contenedores.length; c++) {
                     let contenedor = contenedores[c];
                     let distancias = distanciasContenedores.filter(contenedores => contenedores.contenedorOrigen.id == contenedor.id);
@@ -94,6 +90,8 @@ export class DistanciaContenedoresServices {
                     for (let d = 0; d < distancias.length; d++) {
                         distancias[d].distancia = rows.elements[d].distance.value;
                         distancias[d].distanciaStr = rows.elements[d].distance.text;
+                        distancias[d].duracion = rows.elements[d].duration.value;
+                        distancias[d].duracionStr = rows.elements[d].duration.text
                     }
                 }
 

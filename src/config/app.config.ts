@@ -1,11 +1,15 @@
 // src/config/config.service.ts
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { join } from 'path';
-import { GoogleApi } from 'src/models/config/google-api.model';
+import { GoogleApi } from 'src/models/config/google-api.request';
 
 require('dotenv').config();
 
 class ConfigService {
+
+  public readonly jwtSecret: string = "cD$Proy3t0GraD0";
+  public readonly jwtExpires: number = 5 * 60000;
+  public readonly cookieKey: string = "CDS_BACKEND_API";
 
   constructor(private env: { [k: string]: string | undefined }) { }
 
@@ -35,24 +39,16 @@ class ConfigService {
   public getTypeOrmConfig(): TypeOrmModuleOptions {
     return {
       type: 'postgres',
-
       host: this.getValue('POSTGRES_HOST'),
       port: parseInt(this.getValue('POSTGRES_PORT')),
       username: this.getValue('POSTGRES_USER'),
       password: this.getValue('POSTGRES_PASSWORD'),
       database: this.getValue('POSTGRES_DATABASE'),
       synchronize: true,
-
+      migrationsRun: true,
       entities: [join(__dirname, '/../entities/**/*.entity{.ts,.js}')],
-
-      migrationsTableName: 'migration',
-
-      migrations: ['src/migration/*.ts'],
-
-      cli: {
-        migrationsDir: 'src/migration',
-      },
-
+      migrationsTableName: 'migrations',
+      migrations: [join(__dirname, '/../migrations/*{.ts,.js}')],
       ssl: this.isProduction(),
     };
   }

@@ -60,13 +60,14 @@ export class DispositivosIoTServices {
         }
     }
 
-    async remove(id: string): Promise<DispositivosIoT>{
+    async remove(id: string, username: string): Promise<DispositivosIoT>{
         try {
             let dispositivoIoT: DispositivosIoT =  await this._repo.findOne(id);
             if(!dispositivoIoT) {
                 throw new NotFoundError(`The object with id ${id} was not found`);
             }
             dispositivoIoT.isActive = false;
+            dispositivoIoT.lastChangedBy = username;
             return this._repo.save(dispositivoIoT);
         } catch (error) {
             console.log(error);

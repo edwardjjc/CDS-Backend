@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from "@nestjs/common";
+import { Request } from "express";
 import { BaseResponse } from "src/models/response/base.response";
 import { LecturasServices } from "./lecturas.services";
 import { AddLectura } from "./dto";
@@ -36,12 +37,14 @@ export class LecturasController {
     }
 
     @Post()
-    async create(@Body() addLectura: AddLectura): Promise<BaseResponse> {
+    async create(@Body() addLectura: AddLectura, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
+            const security = req.body.security;
+            addLectura.createdBy = security.username;
             response.status = 'success';
             response.message = '';
-            response.data = await this.lecturasService.insert(addLectura)
+            response.data = await this.lecturasService.insert(addLectura);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -50,12 +53,13 @@ export class LecturasController {
     }
 
     @Delete(':id')
-    async remove(@Param('id') id: string): Promise<BaseResponse> {
+    async remove(@Param('id') id: string, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
+            const security = req.body.security;
             response.status = 'success';
             response.message = '';
-            response.data = this.lecturasService.remove(id)
+            response.data = await this.lecturasService.remove(id, security.username);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;

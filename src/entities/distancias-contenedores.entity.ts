@@ -17,4 +17,10 @@ export class DistanciasContenedores extends BaseEntity {
 
   @Column({ type: "varchar", length: 300 })
   distanciaStr: string;
+
+  @Column({ type: "decimal" })
+  duracion: number;
+
+  @Column({ type: "varchar", length: 300 })
+  duracionStr: string;
 }
