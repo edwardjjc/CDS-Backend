@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from "@nestjs/common";
 import { Request } from "express";
 import { BaseResponse } from "src/models/response/base.response";
+import { JwtAuthGuard } from "../security/guards/jwt.guard";
 import { DispositivosIoTServices } from "./dispositivos-iot.services";
 import { AddDispositivoIoT, UpdateDispositivoIoT } from "./dto";
 
@@ -8,6 +9,7 @@ import { AddDispositivoIoT, UpdateDispositivoIoT } from "./dto";
 export class DispositivosIoTController {
     constructor(private readonly dispositivosIoTService: DispositivosIoTServices) {}
 
+    @UseGuards(JwtAuthGuard)
     @Get()
     async getAll(): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
@@ -22,6 +24,7 @@ export class DispositivosIoTController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     async getById(@Param('id') id: string): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
@@ -36,6 +39,7 @@ export class DispositivosIoTController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     async create(@Body() addDispositivoIoT: AddDispositivoIoT, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
@@ -52,6 +56,7 @@ export class DispositivosIoTController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Put(':id')
     async update(@Param('id') id: string, @Body() updateDispositivoIoT: UpdateDispositivoIoT, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
@@ -68,6 +73,7 @@ export class DispositivosIoTController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     async remove(@Param('id') id: string, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;

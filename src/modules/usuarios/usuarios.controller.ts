@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, Req } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards } from "@nestjs/common";
 import { Request } from "express";
 import { BaseResponse } from "src/models/response/base.response";
+import { JwtAuthGuard } from "../security/guards/jwt.guard";
 import { AddUsuario } from "./dto";
 import { UsuariosServices } from "./usuarios.services";
 
@@ -8,6 +9,7 @@ import { UsuariosServices } from "./usuarios.services";
 export class UsuariosController {
     constructor(private readonly usuariosService: UsuariosServices) {}
 
+    @UseGuards(JwtAuthGuard)
     @Get()
     async getAll(): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
@@ -22,6 +24,7 @@ export class UsuariosController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     async getById(@Param('id') id: string): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
@@ -36,6 +39,7 @@ export class UsuariosController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     async create(@Body() addUsuario: AddUsuario, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
@@ -52,6 +56,7 @@ export class UsuariosController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     async remove(@Param('id') id: string, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;

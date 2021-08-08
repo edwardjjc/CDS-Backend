@@ -1,13 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards } from "@nestjs/common";
 import { Request } from "express";
 import { BaseResponse } from "src/models/response/base.response";
 import { LecturasServices } from "./lecturas.services";
 import { AddLectura } from "./dto";
+import { JwtAuthGuard } from "../security/guards/jwt.guard";
 
 @Controller('lecturas')
 export class LecturasController {
     constructor(private readonly lecturasService: LecturasServices) {}
 
+    @UseGuards(JwtAuthGuard)
     @Get()
     async getAll(): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
@@ -22,6 +24,7 @@ export class LecturasController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     async getById(@Param('id') id: string): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
@@ -36,6 +39,7 @@ export class LecturasController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     async create(@Body() addLectura: AddLectura, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
@@ -52,6 +56,7 @@ export class LecturasController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     async remove(@Param('id') id: string, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;

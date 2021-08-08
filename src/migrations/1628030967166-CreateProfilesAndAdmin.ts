@@ -23,6 +23,11 @@ export class CreateProfilesAndAdmin1628030967166 implements MigrationInterface {
                 createdBy: "admin",
                 lastChangedBy: "admin",
                 descripcion: "Operador"
+            },
+            {
+                createdBy: "admin",
+                lastChangedBy: "admin",
+                descripcion: "Sensor"
             }
         ]);
 
@@ -34,6 +39,15 @@ export class CreateProfilesAndAdmin1628030967166 implements MigrationInterface {
                 lastChangedBy: "admin",
                 username: "admin",
                 password: await hash("admin", 10),
+                email: "admin@cds.com.do",
+                perfil: perfil
+            },
+
+            {
+                createdBy: "admin",
+                lastChangedBy: "admin",
+                username: "sensor",
+                password: await hash("Di$pos1tiv0IoT", 10),
                 email: "admin@cds.com.do",
                 perfil: perfil
             }

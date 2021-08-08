@@ -1,15 +1,11 @@
 // src/config/config.service.ts
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { join } from 'path';
-import { GoogleApi } from 'src/models/config/google-api.request';
+import { GoogleApi, JwtConfig } from 'src/models/config';
 
 require('dotenv').config();
 
 class ConfigService {
-
-  public readonly jwtSecret: string = "cD$Proy3t0GraD0";
-  public readonly jwtExpires: number = 5 * 60000;
-  public readonly cookieKey: string = "CDS_BACKEND_API";
 
   constructor(private env: { [k: string]: string | undefined }) { }
 
@@ -61,6 +57,14 @@ class ConfigService {
     };
   }
 
+  public getJwtConfig(): JwtConfig {
+    return {
+      jwtSecret: this.getValue('JWT_SECRET_KEY'),
+      jwtExpires: parseFloat(this.getValue('JWT_EXPIRES_IN')) * 60000,
+      cookieKey: this.getValue('COOKIE_TOKEN_KEY')
+    }
+  }
+
 }
 
 const configService = new ConfigService(process.env)
@@ -72,7 +76,10 @@ const configService = new ConfigService(process.env)
     'POSTGRES_DATABASE',
     'GOOGLE_API_KEY',
     'GOOGLE_DISTANCE_API',
-    'GOOGLE_GEOLOCATION_API'
+    'GOOGLE_GEOLOCATION_API',
+    'JWT_SECRET_KEY',
+    'JWT_EXPIRES_IN',
+    'COOKIE_TOKEN_KEY'
   ]);
 
 export { configService };

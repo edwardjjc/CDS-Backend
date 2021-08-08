@@ -1,5 +1,6 @@
 import { hash } from "bcrypt";
 import { configService } from "src/config/app.config";
+import { JwtConfig } from "src/models/config";
 import { Security } from "./dto";
 
 export class SecurityLogin {
@@ -18,10 +19,11 @@ export class SecurityLogin {
 
     async setUserToken(login: Security): Promise<string> {
         let currentDate: Date = new Date();
+        let jwtConfig: JwtConfig = configService.getJwtConfig();
         let token: string = login.username + currentDate.toString() + String(Math.random() * 1000)
         try {
             login.token = await hash(token, 10);
-            login.valido_hasta = new Date(currentDate.getTime() + configService.jwtExpires)
+            login.valido_hasta = new Date(currentDate.getTime() + jwtConfig.jwtExpires)
             this.loginList.push(login);
         } catch (error) {
             console.log(error);
@@ -63,8 +65,9 @@ export class SecurityLogin {
 
     private async refreshToken(login: Security){
         try {
+            let jwtConfig: JwtConfig = configService.getJwtConfig();
             let currentDate: Date = new Date();
-            login.valido_hasta = new Date(currentDate.getTime() + configService.jwtExpires)
+            login.valido_hasta = new Date(currentDate.getTime() + jwtConfig.jwtExpires)
         } catch (error) {
             console.log(error);
             throw error;

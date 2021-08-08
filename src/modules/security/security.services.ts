@@ -15,13 +15,6 @@ export class SecurityServices {
     async login(login: Login): Promise<any> {
         try {
             let usuario: Usuarios =  await this._repo.findOne({ relations: ["perfil"], where: { username: login.username } });
-            if(!usuario) {
-                throw new NotFoundError(`Nombre de Usuario o Password Incorrecto`);
-            }
-            let areEquals: Boolean = await this.securityEvaluatorService.evalPassword(usuario, login.password);
-            if(!areEquals) {
-                throw new NotFoundError(`Nombre de Usuario o Password Incorrecto`);
-            }
             let token = await this.securityEvaluatorService.login(usuario);
             return token;
         } catch (error) {
@@ -37,6 +30,17 @@ export class SecurityServices {
         } catch (error) {
             console.log(error);
             throw error;
+        }
+    }
+
+    async evaluateUser(login: Login){
+        let usuario: Usuarios =  await this._repo.findOne({ relations: ["perfil"], where: { username: login.username } });
+        if(!usuario) {
+            throw new NotFoundError(`Nombre de Usuario o Password Incorrecto`);
+        }
+        let areEquals: Boolean = await this.securityEvaluatorService.evalPassword(usuario, login.password);
+        if(!areEquals) {
+            throw new NotFoundError(`Nombre de Usuario o Password Incorrecto`);
         }
     }
 

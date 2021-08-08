@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from "@nestjs/common";
 import { Request } from "express";
 import { BaseResponse } from "src/models/response/base.response";
 import { DistanciaContenedoresServices } from "../distancias-contenedores/distancias-contenedores.services";
+import { JwtAuthGuard } from "../security/guards/jwt.guard";
 import { ContenedoresServices } from "./contenedores.services";
 import { AddContenedor, UpdateContenedor } from "./dto";
 
@@ -10,6 +11,8 @@ export class ContenedoresController {
     constructor(private readonly contenedoresService: ContenedoresServices,
                 private readonly distanciaContenedoresService: DistanciaContenedoresServices) {}
 
+
+    @UseGuards(JwtAuthGuard)
     @Get()
     async getAll(): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
@@ -38,6 +41,7 @@ export class ContenedoresController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post('fill-distances')
     async fillDistances(): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse();
@@ -54,6 +58,7 @@ export class ContenedoresController {
         return response
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     async create(@Body() addContenedor: AddContenedor, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
@@ -70,6 +75,7 @@ export class ContenedoresController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Put(':id')
     async update(@Param('id') id: string, @Body() updateContenedor: UpdateContenedor, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
@@ -86,6 +92,7 @@ export class ContenedoresController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     async remove(@Param('id') id: string, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;

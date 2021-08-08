@@ -1,19 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { Request } from "express";
 import { AddCompania, UpdateCompania } from "src/modules/companias/dto";
 import { BaseResponse } from "src/models/response/base.response";
 import { CompaniasServices } from "src/modules/companias/companias.services";
+import { JwtAuthGuard } from "../security/guards/jwt.guard";
+import { Security } from "../security/dto";
 
 @Controller('compania')
 export class CompaniasController {
     constructor(private readonly companiaService: CompaniasServices) {}
 
-    @Get('test')
-    async test(@Query() query){
-        console.log(`No Serie recibido ${query.noSerie} y Lectura recibida ${query.lectura}`)
-        return 'OK';
-    }
-
+    @UseGuards(JwtAuthGuard)
     @Get()
     async getAll(): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
@@ -28,6 +25,7 @@ export class CompaniasController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     async getById(@Param('id') id: string): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
@@ -42,11 +40,13 @@ export class CompaniasController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     async create(@Body() addCompania: AddCompania, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
-            let security = req.body.security;
+            let security: Security = new Security();
+            Object.assign(security, req.user);
             addCompania.createdBy = security.username;
             response.status = 'success';
             response.message = '';
@@ -58,11 +58,13 @@ export class CompaniasController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Put(':id')
     async update(@Param('id') id: string, @Body() updateCompania: UpdateCompania, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
-            let security = req.body.security;
+            let security: Security = new Security();
+            Object.assign(security, req.user);
             updateCompania.lastChangedBy = security.username;
             response.status = 'success';
             response.message = '';
@@ -74,11 +76,13 @@ export class CompaniasController {
         return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     async remove(@Param('id') id: string, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
-            const security = req.body.security;
+            let security: Security = new Security();
+            Object.assign(security, req.user);
             response.status = 'success';
             response.message = '';
             response.data = await this.companiaService.remove(id, security.username);
