@@ -1,38 +1,38 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
 
 Colector Desechos Sólidos es un sistema para que los ayuntamientos puedan trazar rutas inteligentes para recoger solo los contenedores que requieren dicho servicio. Esto evaluando los dispositivos IoT que están en cada contenedor para determinar si este posee o no desechos sólidos.
 
-## Installation
+## Instalación
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+## Variables de Entorno
+
+Crear archivo .env en la ruta raiz de la aplicación con las siguientes variables
+
+```bash
+
+# Tipo de base de datos ==> Postgres
+
+POSTGRES_HOST=[DB_HOST] # reemplazar por host de la base de datos
+POSTGRES_PORT=[DB_PORT] # reemplazar por puerto de la base de datos
+POSTGRES_USER=[DB_USER] # reemplazar por usuario de conexion a la base de datos
+POSTGRES_PASSWORD=[DB_PASSWORD] # reemplazar por password del usuario de base de datos
+POSTGRES_DATABASE=[DB_NAME] # reemplazar por nombre de la base de datos
+MODE=[APP_MODE] # DEV o PROD
+COOKIE_TOKEN_KEY=CDS_BACKEND_API_TOKEN # Mantener este valor por defecto
+JWT_SECRET_KEY=[JWT_SECRET] # reemplazar por cadena de texto para firma de los token
+JWT_EXPIRES_IN=[JWT_EXPIRES_IN] # reemplazar por valor numerico de tiempo de vigencia de los token en minutos. ejemplo 15 ==> 15 minutos de inactividad, 0.5 ==> 30 segundos de inactividad 
+GOOGLE_API_KEY=[G_API_KEY] # reemplazar por el api key de Google Platform
+GOOGLE_DISTANCE_API=https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=:LOCATIONSO&destinations=:LOCATIONSD&key=:API_KEY  # Mantener este valor por defecto
+GOOGLE_GEOLOCATION_API=https://www.googleapis.com/geolocation/v1/geolocate?key=:API_KEY  # Mantener este valor por defecto
+
+```
+
+## Correr el APP
 
 ```bash
 # development
@@ -45,29 +45,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+## Colaboradores
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+- Author - [Edward Jimenez](https://github.com/edwardjjc)
+- Author - [Rosalina Nolberto]()
