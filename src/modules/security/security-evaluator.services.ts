@@ -26,7 +26,7 @@ export class SecurityEvaluatorService {
     
     async login(usuario: Usuarios): Promise<any> {
         this.securityLogin = await SecurityLogin.getInstance();
-        let payload = {username: "",email:"",perfil:{},token:""};
+        let payload = {iss: usuario.username, sub: usuario.id, username: "", email:"", aud: usuario.perfil.descripcion, perfil:{}, token:""};
         let security: Security = new Security();
         try {
             security.user_id = usuario.id;

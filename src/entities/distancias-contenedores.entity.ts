@@ -6,10 +6,10 @@ import { Contenedores } from './contenedores.entity';
 @Entity({ name: 'distancias_contenedores' })
 export class DistanciasContenedores extends BaseEntity {
   
-  @ManyToOne(() => Contenedores, origen => origen.rutasContenedores)
+  @ManyToOne(() => Contenedores, origen => origen.rutasContenedores, { nullable: true })
   contenedorOrigen: Contenedores;
 
-  @ManyToOne(() => Contenedores, destino => destino.rutasContenedores)
+  @ManyToOne(() => Contenedores, destino => destino.rutasContenedores, { nullable: true })
   contenedorDestino: Contenedores;
 
   @Column({ type: "decimal" })

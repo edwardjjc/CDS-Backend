@@ -35,5 +35,7 @@ export class Contenedores extends BaseEntity {
 
   @Column({ type: 'decimal', nullable: true })
   gpsAltitude: number;
-  
+
+  @Column({ type: 'boolean', default: false })
+  pendienteRecoleccion: boolean;
 }

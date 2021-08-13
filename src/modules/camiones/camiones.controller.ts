@@ -1,14 +1,14 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from "@nestjs/common";
 import { Request } from "express";
-import { AddCompania, UpdateCompania } from "src/modules/companias/dto";
 import { BaseResponse } from "src/models/response/base.response";
-import { CompaniasServices } from "src/modules/companias/companias.services";
 import { JwtAuthGuard } from "../security/guards/jwt.guard";
 import { Security } from "../security/dto";
+import { CamionesServices } from "./camiones.services";
+import { AddCamion, UpdateCamion } from "./dto";
 
-@Controller('compania')
-export class CompaniasController {
-    constructor(private readonly companiaService: CompaniasServices) {}
+@Controller('camion')
+export class CamionesController {
+    constructor(private readonly camionesService: CamionesServices) {}
 
     @UseGuards(JwtAuthGuard)
     @Get()
@@ -17,7 +17,7 @@ export class CompaniasController {
         try{
             response.status = 'success';
             response.message = '';
-            response.data =  await this.companiaService.getAll()
+            response.data =  await this.camionesService.getAll()
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -32,7 +32,7 @@ export class CompaniasController {
         try {
             response.status = 'success';
             response.message = '';
-            response.data =  await this.companiaService.getById(id);
+            response.data =  await this.camionesService.getById(id);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -42,15 +42,15 @@ export class CompaniasController {
 
     @UseGuards(JwtAuthGuard)
     @Post()
-    async create(@Body() addCompania: AddCompania, @Req() req: Request): Promise<BaseResponse> {
+    async create(@Body() addCamion: AddCamion, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
             let security: Security = new Security();
             Object.assign(security, req.user);
-            addCompania.createdBy = security.username;
+            addCamion.createdBy = security.username;
             response.status = 'success';
             response.message = '';
-            response.data = await this.companiaService.insert(addCompania)
+            response.data = await this.camionesService.insert(addCamion)
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -60,15 +60,15 @@ export class CompaniasController {
 
     @UseGuards(JwtAuthGuard)
     @Put(':id')
-    async update(@Param('id') id: string, @Body() updateCompania: UpdateCompania, @Req() req: Request): Promise<BaseResponse> {
+    async update(@Param('id') id: string, @Body() updateCamion: UpdateCamion, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
             let security: Security = new Security();
             Object.assign(security, req.user);
-            updateCompania.lastChangedBy = security.username;
+            updateCamion.lastChangedBy = security.username;
             response.status = 'success';
             response.message = '';
-            response.data = await this.companiaService.update(id, updateCompania);
+            response.data = await this.camionesService.update(id, updateCamion);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;
@@ -85,7 +85,7 @@ export class CompaniasController {
             Object.assign(security, req.user);
             response.status = 'success';
             response.message = '';
-            response.data = await this.companiaService.remove(id, security.username);
+            response.data = await this.camionesService.remove(id, security.username);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;

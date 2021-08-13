@@ -1,4 +1,6 @@
+export * from './camiones/camiones.mudule';
 export * from './companias/companias.mudule';
+export * from './configuraciones/configuraciones.mudule';
 export * from './contenedores/contenedores.mudule';
 export * from './dispositivos-iot/dispositivos-iot.mudule';
 export * from './security/security.module';
