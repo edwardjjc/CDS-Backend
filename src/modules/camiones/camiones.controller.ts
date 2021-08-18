@@ -6,7 +6,7 @@ import { Security } from "../security/dto";
 import { CamionesServices } from "./camiones.services";
 import { AddCamion, UpdateCamion } from "./dto";
 
-@Controller('camion')
+@Controller('camiones')
 export class CamionesController {
     constructor(private readonly camionesService: CamionesServices) {}
 

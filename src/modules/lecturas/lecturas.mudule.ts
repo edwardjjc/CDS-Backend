@@ -1,6 +1,6 @@
-import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DispositivosIoT, Lecturas, TiposSensores } from "src/entities";
+import { Configuraciones, Contenedores, DispositivosIoT, Lecturas, TiposContenedores, TiposSensores } from "src/entities";
 import { SecurityModule } from "../security/security.module";
 import { LecturasController } from "./lecturas.controller";
 import { LecturasServices } from "./lecturas.services";
@@ -8,7 +8,10 @@ import { LecturasServices } from "./lecturas.services";
 @Module({
     imports: [TypeOrmModule.forFeature([Lecturas]),
                 TypeOrmModule.forFeature([DispositivosIoT]),
-                TypeOrmModule.forFeature([TiposSensores]), SecurityModule],
+                TypeOrmModule.forFeature([TiposContenedores]),
+                TypeOrmModule.forFeature([TiposSensores]),
+                TypeOrmModule.forFeature([Contenedores]),
+                TypeOrmModule.forFeature([Configuraciones]), SecurityModule],
     controllers: [LecturasController],
     providers: [LecturasServices],
 })

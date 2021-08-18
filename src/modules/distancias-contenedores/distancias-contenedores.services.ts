@@ -8,6 +8,7 @@ import { GoogleApi } from 'src/models/config/google-api.request';
 import { configService } from 'src/config/app.config';
 import { HttpService } from '@nestjs/axios';
 import { randomUUID } from "crypto";
+import { Distancias } from "./dto/distancias.response";
 
 @Injectable()
 export class DistanciaContenedoresServices {
@@ -26,10 +27,21 @@ export class DistanciaContenedoresServices {
         }
     }
     
-    async getDistanceMatrix(): Promise<any[]> {
+    async getDistanceMatrix(): Promise<Distancias> {
         try {
-            let result: any[] = [];
-            let row: any[] = [];
+            let distancias: Distancias = new Distancias();
+            let contenedoresDB = await this._repoContenedores.find({ where: { pendienteRecoleccion: true } });
+            let configuraciones = await this._repoConfiguraciones.findOne();
+
+            let contenedores: Contenedores[] = [];
+            contenedores.push({ id: randomUUID(), tipoContenedor: undefined, dispositivosIoT: undefined, rutasContenedores: undefined, distanciasContenedoresOrigen: undefined, distanciasContenedoresDestino: undefined, descripcion: "Punto Origen", direccion: "", gpsLatitude: configuraciones.gpsLatitudePuntoOrigen, gpsAltitude: configuraciones.gpsAltitudePuntoOrigen, pendienteRecoleccion: false, isActive: false, isArchived: false, createDateTime: new Date(), createdBy: "", lastChangedDateTime: new Date(), lastChangedBy: "", internalComment: "" });
+            contenedores.push(...contenedoresDB);
+            contenedores.push({ id: randomUUID(), tipoContenedor: undefined, dispositivosIoT: undefined, rutasContenedores: undefined, distanciasContenedoresOrigen: undefined, distanciasContenedoresDestino: undefined, descripcion: "Punto Destino", direccion: "", gpsLatitude: configuraciones.gpsLatitudePuntoDestino, gpsAltitude: configuraciones.gpsAltitudePuntoDestino, pendienteRecoleccion: false, isActive: false, isArchived: false, createDateTime: new Date(), createdBy: "", lastChangedDateTime: new Date(), lastChangedBy: "", internalComment: "" });
+
+            distancias.contenedores = contenedores;
+
+            let result: number[][] = [];
+            let row: number[] = [];
             let distanciasContenedores = await this.getAll();
             let origenActual: string = "";
             for (let i = 0; i < distanciasContenedores.length; i++) {
@@ -39,15 +51,18 @@ export class DistanciaContenedoresServices {
                     if (origenActual != ""){
                         result.push(row);
                     }
-                    row = [];
+                    let clean: number[] = []
+                    row = clean;
                     origenActual = contenedorId;
                 }
-                row.push(distanciaContenedor.duracion);
+                row.push(Number.parseInt(distanciaContenedor.duracion.toString()));
                 if(i == distanciasContenedores.length -1){
                     result.push(row);
                 }
             }
-            return result;
+
+            distancias.matrix = result;
+            return distancias;
         } catch (error) {
             console.log(error);
             throw error;
@@ -56,8 +71,16 @@ export class DistanciaContenedoresServices {
 
     async fill() {
         try {
-            let contenedoresDB = await this._repoContenedores.find({});
             let configuraciones = await this._repoConfiguraciones.findOne();
+            let ultimaAcutalizacionCont = await this._repoContenedores.findOne({ order: { lastChangedDateTime: "DESC" } });
+
+            if (configuraciones.fechaUltimaConstruccion > ultimaAcutalizacionCont.lastChangedDateTime){
+                return;
+            }
+
+            console.log("error")
+
+            let contenedoresDB = await this._repoContenedores.find({});
             let distanciasContenedores: DistanciasContenedores[] = [];
             let googleApi: GoogleApi = configService.getGoogleApiConfig();
             let locations: string = "";

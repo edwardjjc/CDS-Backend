@@ -39,13 +39,11 @@ export class LecturasController {
         return response;
     }
 
-    @UseGuards(JwtAuthGuard)
     @Post()
     async create(@Body() addLectura: AddLectura, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
-            const security = req.body.security;
-            addLectura.createdBy = security.username;
+            addLectura.createdBy = 'sensor';
             response.status = 'success';
             response.message = '';
             response.data = await this.lecturasService.insert(addLectura);

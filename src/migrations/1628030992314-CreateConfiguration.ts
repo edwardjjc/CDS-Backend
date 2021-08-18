@@ -1,5 +1,5 @@
 import { Configuraciones } from "src/entities";
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class CreateConfiguration1628030992314 implements MigrationInterface {
 

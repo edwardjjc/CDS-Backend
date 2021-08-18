@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configService } from './config/app.config';
 import { CamionesModule, CompaniasModule, ConfiguracionesModule, ContenedoresModule, 
-  DispositivosIoTModule, LecturasModule, SecurityModule, TiposCamionesModule, 
+  DispositivosIoTModule, LecturasModule, RutasModule, SecurityModule, TiposCamionesModule, 
   TiposContenedoresModule, TiposSensoresModule, UsuariosModule } from './modules';
 
 @Module({
@@ -13,11 +13,12 @@ import { CamionesModule, CompaniasModule, ConfiguracionesModule, ContenedoresMod
     ConfiguracionesModule, 
     ContenedoresModule,
     DispositivosIoTModule,
+    LecturasModule,
+    RutasModule,
     SecurityModule,
     TiposCamionesModule, 
     TiposContenedoresModule,
     TiposSensoresModule,
-    LecturasModule,
     UsuariosModule
   ],
   controllers: [],

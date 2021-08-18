@@ -4,6 +4,7 @@ import { AddTipoCamion, UpdateTipoCamion } from "src/modules/tipos-camiones/dto"
 import { BaseResponse } from "src/models/response/base.response";
 import { TiposCamionesServices } from "src/modules/tipos-camiones/tipos-camiones.services";
 import { JwtAuthGuard } from "../security/guards/jwt.guard";
+import { Security } from "../security/dto";
 
 @Controller('tipos-camiones')
 export class TiposCamionesController {
@@ -44,7 +45,8 @@ export class TiposCamionesController {
     async create(@Body() addTipoCamion: AddTipoCamion, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
-            const security = req.body.security;
+            let security: Security = new Security();
+            Object.assign(security, req.user);
             addTipoCamion.createdBy = security.username;
             response.status = 'success';
             response.message = '';
@@ -61,7 +63,8 @@ export class TiposCamionesController {
     async update(@Param('id') id: string, @Body() updateTipoCamion: UpdateTipoCamion, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
-            const security = req.body.security;
+            let security: Security = new Security();
+            Object.assign(security, req.user);
             updateTipoCamion.lastChangedBy = security.username;
             response.status = 'success';
             response.message = '';
@@ -78,7 +81,8 @@ export class TiposCamionesController {
     async remove(@Param('id') id: string, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
-            const security = req.body.security;
+            let security: Security = new Security();
+            Object.assign(security, req.user);
             response.status = 'success';
             response.message = '';
             response.data = await this.tiposCamionesService.remove(id, security.username);

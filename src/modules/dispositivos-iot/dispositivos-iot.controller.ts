@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from "@nestjs/common";
 import { Request } from "express";
 import { BaseResponse } from "src/models/response/base.response";
+import { Security } from "../security/dto";
 import { JwtAuthGuard } from "../security/guards/jwt.guard";
 import { DispositivosIoTServices } from "./dispositivos-iot.services";
 import { AddDispositivoIoT, UpdateDispositivoIoT } from "./dto";
@@ -44,7 +45,8 @@ export class DispositivosIoTController {
     async create(@Body() addDispositivoIoT: AddDispositivoIoT, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
-            const security = req.body.security;
+            let security: Security = new Security();
+            Object.assign(security, req.user);
             addDispositivoIoT.createdBy = security.username;
             response.status = 'success';
             response.message = '';
@@ -61,7 +63,8 @@ export class DispositivosIoTController {
     async update(@Param('id') id: string, @Body() updateDispositivoIoT: UpdateDispositivoIoT, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
-            const security = req.body.security;
+            let security: Security = new Security();
+            Object.assign(security, req.user);
             updateDispositivoIoT.lastChangedBy = security.username;
             response.status = 'success';
             response.message = '';
@@ -78,7 +81,8 @@ export class DispositivosIoTController {
     async remove(@Param('id') id: string, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
-            const security = req.body.security;
+            let security: Security = new Security();
+            Object.assign(security, req.user);
             response.status = 'success';
             response.message = '';
             response.data = await this.dispositivosIoTService.remove(id, security.username);

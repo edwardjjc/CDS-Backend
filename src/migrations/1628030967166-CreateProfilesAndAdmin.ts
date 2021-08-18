@@ -1,6 +1,6 @@
 import { hash } from "bcrypt";
 import { Perfiles, Usuarios } from "src/entities";
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class CreateProfilesAndAdmin1628030967166 implements MigrationInterface {
 
@@ -31,7 +31,8 @@ export class CreateProfilesAndAdmin1628030967166 implements MigrationInterface {
             }
         ]);
 
-        const perfil = await perfRepo.findOne({ where: { descripcion: "Administrator"} });
+        const perfilA = await perfRepo.findOne({ where: { descripcion: "Administrator"} });
+        const perfilS = await perfRepo.findOne({ where: { descripcion: "Sensor"} });
 
         await usuRepo.insert([
             {
@@ -40,16 +41,15 @@ export class CreateProfilesAndAdmin1628030967166 implements MigrationInterface {
                 username: "admin",
                 password: await hash("admin", 10),
                 email: "admin@cds.com.do",
-                perfil: perfil
+                perfil: perfilA
             },
-
             {
                 createdBy: "admin",
                 lastChangedBy: "admin",
                 username: "sensor",
                 password: await hash("Di$pos1tiv0IoT", 10),
                 email: "admin@cds.com.do",
-                perfil: perfil
+                perfil: perfilS
             }
         ]);
     }

@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from "@nestjs/common";
 import { Request } from "express";
 import { BaseResponse } from "src/models/response/base.response";
+import { Security } from "../security/dto";
 import { JwtAuthGuard } from "../security/guards/jwt.guard";
 import { AddTipoContenedor, UpdateTipoContenedor } from "./dto";
 import { TiposContenedoresServices } from "./tipos-contenedores.services";
@@ -44,7 +45,8 @@ export class TiposContenedoresController {
     async create(@Body() addTipoContenedor: AddTipoContenedor, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
-            const security = req.body.security;
+            let security: Security = new Security();
+            Object.assign(security, req.user);
             addTipoContenedor.createdBy = security.username;
             response.status = 'success';
             response.message = '';
@@ -61,7 +63,8 @@ export class TiposContenedoresController {
     async update(@Param('id') id: string, @Body() updateTipoContenedor: UpdateTipoContenedor, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
-            const security = req.body.security;
+            let security: Security = new Security();
+            Object.assign(security, req.user);
             updateTipoContenedor.lastChangedBy = security.username;
             response.status = 'success';
             response.message = '';
@@ -78,7 +81,8 @@ export class TiposContenedoresController {
     async remove(@Param('id') id: string, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
-            const security = req.body.security;
+            let security: Security = new Security();
+            Object.assign(security, req.user);
             response.status = 'success';
             response.message = '';
             response.data = await this.tiposContenedoresService.remove(id, security.username);
