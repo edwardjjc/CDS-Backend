@@ -48,7 +48,6 @@ export class ContenedoresController {
         let response: BaseResponse = new BaseResponse();
         try {
             await this.distanciaContenedoresService.removeAll();
-            await this.distanciaContenedoresService.fill();
             response.status = 'success';
             response.message = '';
             response.data = await this.distanciaContenedoresService.getDistanceMatrix();

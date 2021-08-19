@@ -10,11 +10,11 @@ export class CreateConfiguration1628030992314 implements MigrationInterface {
             lastChangedBy: "admin",
             porcentajeMaxContenedores: 40,
             direccionPuntoDestino: "",
-            gpsAltitudePuntoDestino: 0.00,
-            gpsLatitudePuntoDestino: 0.00,
+            gpsAltitudePuntoDestino: -69.967782,
+            gpsLatitudePuntoDestino: 18.567446,
             direccionPuntoOrigen: "",
-            gpsAltitudePuntoOrigen: 0.00,
-            gpsLatitudePuntoOrigen: 0.00,
+            gpsAltitudePuntoOrigen: -69.927426,
+            gpsLatitudePuntoOrigen: 18.44814,
             fechaUltimaConstruccion: new Date()
         }]);
     }

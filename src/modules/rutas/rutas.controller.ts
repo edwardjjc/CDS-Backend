@@ -64,7 +64,6 @@ export class RutasController {
         try {
             let security: Security = new Security();
             Object.assign(security, req.user);
-            //await this.distanciaContenedoresService.fill();
             let distancias: Distancias = await this.distanciaContenedoresService.getDistanceMatrix();
             response.status = 'success';
             response.message = '';
