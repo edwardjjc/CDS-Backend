@@ -12,7 +12,7 @@ export class DispositivosIoTServices {
 
     async getAll(): Promise<DispositivosIoT[]> {
         try {
-            return this._repo.find({});
+            return this._repo.find({ relations: ["contenedor"] });
         } catch(error) {
             console.log(error);
             throw error;
@@ -21,7 +21,7 @@ export class DispositivosIoTServices {
 
     async getById(id: string): Promise<DispositivosIoT> {
         try{
-            return this._repo.findOne(id);
+            return this._repo.findOne(id, { relations: ["contenedor"] });
         } catch (error) {
             console.log(error);
             throw error;

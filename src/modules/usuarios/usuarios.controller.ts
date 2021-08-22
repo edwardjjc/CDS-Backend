@@ -26,6 +26,21 @@ export class UsuariosController {
     }
 
     @UseGuards(JwtAuthGuard)
+    @Get('perfiles')
+    async getPerfiles(): Promise<BaseResponse> {
+        let response: BaseResponse = new BaseResponse;
+        try{
+            response.status = 'success';
+            response.message = '';
+            response.data =  await this.usuariosService.getPerfiles()
+        } catch (error) {
+            response.status = 'fail';
+            response.message = error.message;
+        }
+        return response;
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     async getById(@Param('id') id: string): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;

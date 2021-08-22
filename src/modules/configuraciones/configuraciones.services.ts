@@ -10,9 +10,9 @@ export class ConfiguracionesServices {
     
     constructor(@InjectRepository(Configuraciones) private readonly _repo: Repository<Configuraciones>) {}
 
-    async getAll(): Promise<Configuraciones[]> {
+    async get(): Promise<Configuraciones> {
         try {
-            return this._repo.find({});
+            return this._repo.findOne({});
         } catch(error) {
             console.log(error);
             throw error;

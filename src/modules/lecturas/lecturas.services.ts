@@ -17,7 +17,7 @@ export class LecturasServices {
 
     async getAll(): Promise<Lecturas[]> {
         try {
-            return this._repo.find({});
+            return this._repo.find({relations:["tipoSensor","dispositivoIoT"]});
         } catch(error) {
             console.log(error);
             throw error;
@@ -27,6 +27,16 @@ export class LecturasServices {
     async getById(id: string): Promise<Lecturas> {
         try{
             return this._repo.findOne(id);
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    async getBySensor(_noSerie: string): Promise<Lecturas[]> {
+        try{
+            let lecturas = await this.getAll();
+            return lecturas.filter(f => f.dispositivoIoT.noSerie == _noSerie);
         } catch (error) {
             console.log(error);
             throw error;
@@ -57,7 +67,8 @@ export class LecturasServices {
     async updateContenedor(contenedor: Contenedores, lectura: number){
         try {
             const configuraciones: Configuraciones = await this.confRepo.findOne();
-            const porcMetrosLectura: number = ((lectura / 100) / contenedor.tipoContenedor.cantidadMetros) * 100;
+            const metrosOcupados = contenedor.tipoContenedor.cantidadMetros - (lectura / 100);
+            const porcMetrosLectura: number = (metrosOcupados / contenedor.tipoContenedor.cantidadMetros) * 100;
             if (porcMetrosLectura >= configuraciones.porcentajeMaxContenedores) {
                 contenedor.pendienteRecoleccion = true;
             } else {

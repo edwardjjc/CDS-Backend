@@ -17,7 +17,7 @@ export class RutasServices {
 
     async getAllActive(): Promise<Rutas[]> {
         try {
-            return this._repoRutas.find({ where: { isActive: true, isArchived: false } });
+            return this._repoRutas.find({ relations: ["camion"], where: { isActive: true, isArchived: false } });
         } catch(error) {
             console.log(error);
             throw error;
@@ -26,7 +26,7 @@ export class RutasServices {
 
     async getAllHistory(): Promise<Rutas[]> {
         try {
-            return this._repoRutas.find({ where: { isActive: true, isArchived: true } });
+            return this._repoRutas.find({ relations: ["camion"], where: { isActive: true, isArchived: true } });
         } catch(error) {
             console.log(error);
             throw error;
@@ -51,6 +51,7 @@ export class RutasServices {
             if (distancias.contenedores.length < 2) {
                 throw new BadRequestException("No existen contenedores pendientes de recoleccion");
             }
+            this.archiveAll();
             let solucion = await this.solveTSP(distancias);
             let contenedoresARecolectar = solucion.individuo.slice(1, solucion.individuo.length - 1);
             let cantContenedoresxCamion = Math.ceil(contenedoresARecolectar.length / camiones.length);
@@ -68,21 +69,38 @@ export class RutasServices {
                 listaRutas.push({ camion: camiones[i], secuencias: secuenciaContenedores });
             }
 
-            listaRutas.forEach(async (value, index, array) => {
+            let createdRutas: Rutas[] = [];
+
+            for (let index = 0; index < listaRutas.length; index++) {
                 let newRuta: Rutas = new Rutas();
                 const createdBy = "admin";
-                newRuta.camion = array[index].camion;
+                newRuta.camion = listaRutas[index].camion;
                 newRuta.createdBy = createdBy;
                 newRuta.lastChangedBy = createdBy;
+                createdRutas.push(newRuta);
                 let savedRuta = await this._repoRutas.save(newRuta);
-                this.insertRutaContenedor(createdBy, savedRuta, array[index].secuencias);
-            })
+                this.insertRutaContenedor(createdBy, savedRuta, listaRutas[index].secuencias);
+            }
 
-            return listaRutas;
+            return createdRutas;
         } catch (error) {
             console.log(error);
             throw error;
         }
+    }
+
+    async archiveAll() {
+        try {
+            let rutas = await this._repoRutas.find({ where: { isActive: true, isArchived: false } });
+            rutas.forEach(ruta => {
+                ruta.isArchived = true;
+                this._repoRutas.save(ruta);
+            });
+        } catch(error) {
+            console.log(error);
+            throw error;
+        }
+
     }
 
     async solveTSP(distancias: Distancias): Promise<Solucion> {

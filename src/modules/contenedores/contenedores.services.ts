@@ -12,7 +12,7 @@ export class ContenedoresServices {
 
     async getAll(): Promise<Contenedores[]> {
         try {
-            return this._repo.find({});
+            return this._repo.find({ relations: ["tipoContenedor"] });
         } catch(error) {
             console.log(error);
             throw error;
@@ -21,7 +21,7 @@ export class ContenedoresServices {
 
     async getById(id: string): Promise<Contenedores> {
         try{
-            return this._repo.findOne(id);
+            return this._repo.findOne(id, { relations: ["tipoContenedor"] });
         } catch (error) {
             console.log(error);
             throw error;

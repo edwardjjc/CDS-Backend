@@ -1,5 +1,6 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { compare } from "bcrypt";
 import { Usuarios } from "src/entities";
 import { BadRequestError, NotFoundError } from "src/models/error";
 import { Repository } from "typeorm";
@@ -15,8 +16,13 @@ export class SecurityServices {
     async login(login: Login): Promise<any> {
         try {
             let usuario: Usuarios =  await this._repo.findOne({ relations: ["perfil"], where: { username: login.username } });
-            let token = await this.securityEvaluatorService.login(usuario);
-            return token;
+            let loginValido: boolean = await compare(login.password, usuario.password);
+            if (loginValido) {
+                let token = await this.securityEvaluatorService.login(usuario);
+                return token;
+            } else {
+                throw new UnauthorizedException();
+            }
         } catch (error) {
             console.log(error);
             throw error;

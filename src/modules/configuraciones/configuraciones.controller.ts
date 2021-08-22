@@ -12,12 +12,12 @@ export class ConfiguracionesController {
 
     @UseGuards(JwtAuthGuard)
     @Get()
-    async getAll(): Promise<BaseResponse> {
+    async get(): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try{
             response.status = 'success';
             response.message = '';
-            response.data =  await this.configuracionesService.getAll()
+            response.data =  await this.configuracionesService.get()
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;

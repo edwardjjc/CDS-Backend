@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Usuarios } from "src/entities";
+import { Perfiles, Usuarios } from "src/entities";
 import { BadRequestError, NotFoundError } from "src/models/error";
 import { Repository } from "typeorm";
 import { AddUsuario } from "./dto";
@@ -11,11 +11,21 @@ export class UsuariosServices {
 
     private securityService: SecurityServices;
     
-    constructor(@InjectRepository(Usuarios) private readonly _repo: Repository<Usuarios>) {}
+    constructor(@InjectRepository(Usuarios) private readonly _repo: Repository<Usuarios>,
+                @InjectRepository(Perfiles) private readonly _repoPerf: Repository<Perfiles>) {}
 
     async getAll(): Promise<Usuarios[]> {
         try {
-            return this._repo.find({ select: ["username", "email", "perfil"] });
+            return this._repo.find({ select: ["id", "createdBy", "createDateTime", "lastChangedBy", "lastChangedDateTime", "isActive", "isArchived", "internalComment", "username", "email", "perfil"], relations: ["perfil"] });
+        } catch(error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    async getPerfiles(): Promise<Perfiles[]> {
+        try {
+            return this._repoPerf.find({  });
         } catch(error) {
             console.log(error);
             throw error;
@@ -24,7 +34,7 @@ export class UsuariosServices {
 
     async getById(id: string): Promise<Usuarios> {
         try{
-            return this._repo.findOne(id, { select: ["username", "email", "perfil"] });
+            return this._repo.findOne(id, { select: ["id", "createdBy", "createDateTime", "lastChangedBy", "lastChangedDateTime", "isActive", "isArchived", "internalComment", "username", "email", "perfil"], relations: ["perfil"] });
         } catch (error) {
             console.log(error);
             throw error;

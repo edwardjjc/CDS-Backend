@@ -24,14 +24,29 @@ export class LecturasController {
         return response;
     }
 
+    // @UseGuards(JwtAuthGuard)
+    // @Get(':id')
+    // async getById(@Param('id') id: string): Promise<BaseResponse> {
+    //     let response: BaseResponse = new BaseResponse;
+    //     try {
+    //         response.status = 'success';
+    //         response.message = '';
+    //         response.data =  await this.lecturasService.getById(id);
+    //     } catch (error) {
+    //         response.status = 'fail';
+    //         response.message = error.message;
+    //     }
+    //     return response;
+    // }
+
     @UseGuards(JwtAuthGuard)
     @Get(':id')
-    async getById(@Param('id') id: string): Promise<BaseResponse> {
+    async getBySensor(@Param('id') id: string): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
             response.status = 'success';
             response.message = '';
-            response.data =  await this.lecturasService.getById(id);
+            response.data =  await this.lecturasService.getBySensor(id);
         } catch (error) {
             response.status = 'fail';
             response.message = error.message;

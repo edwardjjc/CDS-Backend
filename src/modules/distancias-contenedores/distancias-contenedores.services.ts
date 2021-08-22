@@ -43,7 +43,20 @@ export class DistanciaContenedoresServices {
 
             let result: number[][] = [];
             let row: number[] = [];
-            let distanciasContenedores = await this.getAll();
+            let distanciasContenedoresDB = await this._repo.find({ relations: ["contenedorOrigen", "contenedorDestino"], order: { createDateTime: "ASC" } });
+            let distanciasContenedores: DistanciasContenedores[] = []
+            for(let d = 0; d < distanciasContenedoresDB.length; d++ ){
+                let distancia = distanciasContenedoresDB[d];
+                if(distancia.contenedorOrigen == null && distancia.contenedorDestino == null) {
+                    distanciasContenedores.push(distancia);
+                } else if(distancia.contenedorOrigen != null && distancia.contenedorOrigen.pendienteRecoleccion == true && distancia.contenedorDestino == null) {
+                    distanciasContenedores.push(distancia);
+                } else if(distancia.contenedorDestino != null && distancia.contenedorDestino.pendienteRecoleccion == true && distancia.contenedorOrigen == null) {
+                    distanciasContenedores.push(distancia);
+                } else if(distancia.contenedorOrigen != null && distancia.contenedorDestino != null && distancia.contenedorDestino.pendienteRecoleccion == true && distancia.contenedorOrigen.pendienteRecoleccion == true) {
+                    distanciasContenedores.push(distancia);
+                }
+            } 
             let origenActual: string = "";
             for (let i = 0; i < distanciasContenedores.length; i++) {
                 let distanciaContenedor = distanciasContenedores[i];
@@ -61,7 +74,6 @@ export class DistanciaContenedoresServices {
                     result.push(row);
                 }
             }
-
             distancias.matrix = result;
             return distancias;
         } catch (error) {
