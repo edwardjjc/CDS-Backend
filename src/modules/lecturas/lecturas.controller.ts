@@ -58,6 +58,7 @@ export class LecturasController {
     async create(@Body() addLectura: AddLectura, @Req() req: Request): Promise<BaseResponse> {
         let response: BaseResponse = new BaseResponse;
         try {
+            console.log(addLectura);
             addLectura.createdBy = 'sensor';
             response.status = 'success';
             response.message = '';

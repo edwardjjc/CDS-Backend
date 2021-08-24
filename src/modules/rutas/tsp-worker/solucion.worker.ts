@@ -33,23 +33,24 @@ export class Solucion {
 
     evaluar=(contenedores?: Contenedores[])=>{
         let suma=0,ind=this.individuo;
-        console.log(this.individuo)
-        console.log(contenedores)
         let anterior=ind[ind.length-1];
         ind.forEach(actual => {
-            let contenedor = contenedores[actual];
-            console.log(contenedor)
-            let contenedorOrd = { 
+            suma+=parseInt(this.mapa[anterior][actual]); // ir desde hasta
+            anterior=actual;
+            
+        });
+        let i: number = 0;
+        this.contenedores = ind.map(obj => {
+            i++;
+            let contenedor = contenedores[obj];
+            return { 
                 id: contenedor.id, 
                 gpsLatitude: contenedor.gpsLatitude,
                 descripcion: contenedor.descripcion,
                 gpsAltitude: contenedor.gpsAltitude,
-                orden: actual + 1 
+                orden: i 
             }
-            suma+=parseInt(this.mapa[anterior][actual]); // ir desde hasta
-            anterior=actual;
-            this.contenedores.push(contenedorOrd);
-        });
+        })
         this.valor=suma;
         return suma;
     }

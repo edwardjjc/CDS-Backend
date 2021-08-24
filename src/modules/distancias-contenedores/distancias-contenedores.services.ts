@@ -35,9 +35,9 @@ export class DistanciaContenedoresServices {
             let configuraciones = await this._repoConfiguraciones.findOne();
 
             let contenedores: Contenedores[] = [];
-            //contenedores.push({ id: randomUUID(), tipoContenedor: undefined, dispositivosIoT: undefined, rutasContenedores: undefined, distanciasContenedoresOrigen: undefined, distanciasContenedoresDestino: undefined, descripcion: "Punto Origen", direccion: "", gpsLatitude: configuraciones.gpsLatitudePuntoOrigen, gpsAltitude: configuraciones.gpsAltitudePuntoOrigen, pendienteRecoleccion: false, isActive: false, isArchived: false, createDateTime: new Date(), createdBy: "", lastChangedDateTime: new Date(), lastChangedBy: "", internalComment: "" });
+            contenedores.push({ id: randomUUID(), tipoContenedor: undefined, dispositivosIoT: undefined, rutasContenedores: undefined, distanciasContenedoresOrigen: undefined, distanciasContenedoresDestino: undefined, descripcion: "Punto Origen", direccion: "", gpsLatitude: configuraciones.gpsLatitudePuntoOrigen, gpsAltitude: configuraciones.gpsAltitudePuntoOrigen, pendienteRecoleccion: false, isActive: false, isArchived: false, createDateTime: new Date(), createdBy: "", lastChangedDateTime: new Date(), lastChangedBy: "", internalComment: "" });
             contenedores.push(...contenedoresDB);
-            //contenedores.push({ id: randomUUID(), tipoContenedor: undefined, dispositivosIoT: undefined, rutasContenedores: undefined, distanciasContenedoresOrigen: undefined, distanciasContenedoresDestino: undefined, descripcion: "Punto Destino", direccion: "", gpsLatitude: configuraciones.gpsLatitudePuntoDestino, gpsAltitude: configuraciones.gpsAltitudePuntoDestino, pendienteRecoleccion: false, isActive: false, isArchived: false, createDateTime: new Date(), createdBy: "", lastChangedDateTime: new Date(), lastChangedBy: "", internalComment: "" });
+            contenedores.push({ id: randomUUID(), tipoContenedor: undefined, dispositivosIoT: undefined, rutasContenedores: undefined, distanciasContenedoresOrigen: undefined, distanciasContenedoresDestino: undefined, descripcion: "Punto Destino", direccion: "", gpsLatitude: configuraciones.gpsLatitudePuntoDestino, gpsAltitude: configuraciones.gpsAltitudePuntoDestino, pendienteRecoleccion: false, isActive: false, isArchived: false, createDateTime: new Date(), createdBy: "", lastChangedDateTime: new Date(), lastChangedBy: "", internalComment: "" });
 
             distancias.contenedores = contenedores;
 
@@ -47,13 +47,13 @@ export class DistanciaContenedoresServices {
             let distanciasContenedores: DistanciasContenedores[] = []
             for(let d = 0; d < distanciasContenedoresDB.length; d++ ){
                 let distancia = distanciasContenedoresDB[d];
-                /*if(distancia.contenedorOrigen != null && distancia.contenedorDestino != null) {
+                if(distancia.contenedorOrigen == null && distancia.contenedorDestino == null) {
                     distanciasContenedores.push(distancia);
                 } else if(distancia.contenedorOrigen != null && distancia.contenedorOrigen.pendienteRecoleccion == true && distancia.contenedorDestino == null) {
                     distanciasContenedores.push(distancia);
                 } else if(distancia.contenedorDestino != null && distancia.contenedorDestino.pendienteRecoleccion == true && distancia.contenedorOrigen == null) {
                     distanciasContenedores.push(distancia);
-                } else */if(distancia.contenedorOrigen != null && distancia.contenedorDestino != null && distancia.contenedorDestino.pendienteRecoleccion == true && distancia.contenedorOrigen.pendienteRecoleccion == true) {
+                } else if(distancia.contenedorOrigen != null && distancia.contenedorDestino != null && distancia.contenedorDestino.pendienteRecoleccion == true && distancia.contenedorOrigen.pendienteRecoleccion == true) {
                     distanciasContenedores.push(distancia);
                 }
             } 
@@ -69,12 +69,11 @@ export class DistanciaContenedoresServices {
                     row = clean;
                     origenActual = contenedorId;
                 }
-                row.push(Number.parseInt(distanciaContenedor.duracion.toString()));
+                row.push(Number.parseInt(distanciaContenedor.distancia.toString()));
                 if(i == distanciasContenedores.length -1){
                     result.push(row);
                 }
             }
-            console.log(result)
             distancias.matrix = result;
             return distancias;
         } catch (error) {
