@@ -33,9 +33,12 @@ export class Solucion {
 
     evaluar=(contenedores?: Contenedores[])=>{
         let suma=0,ind=this.individuo;
+        console.log(this.individuo)
+        console.log(contenedores)
         let anterior=ind[ind.length-1];
         ind.forEach(actual => {
             let contenedor = contenedores[actual];
+            console.log(contenedor)
             let contenedorOrd = { 
                 id: contenedor.id, 
                 gpsLatitude: contenedor.gpsLatitude,

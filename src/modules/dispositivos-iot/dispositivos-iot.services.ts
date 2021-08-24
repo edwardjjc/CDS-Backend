@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DispositivosIoT } from "src/entities";
 import { BadRequestError, NotFoundError } from "src/models/error";
-import { Repository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 import { AddDispositivoIoT, UpdateDispositivoIoT } from "./dto";
 
 @Injectable()
@@ -12,7 +12,12 @@ export class DispositivosIoTServices {
 
     async getAll(): Promise<DispositivosIoT[]> {
         try {
-            return this._repo.find({ relations: ["contenedor"] });
+            let data = await this._repo.createQueryBuilder("disp")
+                            .innerJoinAndSelect("disp.lecturas", "l")
+                            .innerJoinAndSelect("disp.contenedor", "c")
+                            .orderBy("l.createDateTime", "DESC")
+                            .getMany();
+            return data;
         } catch(error) {
             console.log(error);
             throw error;

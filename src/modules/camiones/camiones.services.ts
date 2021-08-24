@@ -12,7 +12,7 @@ export class CamionesServices {
 
     async getAll(): Promise<Camiones[]> {
         try {
-            return this._repo.find({});
+            return this._repo.find({ relations: ["tipoCamion", "compania"] });
         } catch(error) {
             console.log(error);
             throw error;
@@ -21,7 +21,7 @@ export class CamionesServices {
 
     async getById(id: string): Promise<Camiones> {
         try{
-            return this._repo.findOne(id);
+            return this._repo.findOne(id, { relations: ["tipoCamion", "compania"] });
         } catch (error) {
             console.log(error);
             throw error;

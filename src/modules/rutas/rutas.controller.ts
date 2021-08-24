@@ -45,7 +45,6 @@ export class RutasController {
     @UseGuards(JwtAuthGuard)
     @Get('history')
     async getAllHistory(): Promise<BaseResponse> {
-        console.log("AQUI")
         let response: BaseResponse = new BaseResponse;
         try {
             response.status = 'success';

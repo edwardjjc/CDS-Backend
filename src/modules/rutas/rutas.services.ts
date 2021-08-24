@@ -53,9 +53,9 @@ export class RutasServices {
             }
             this.archiveAll();
             let solucion = await this.solveTSP(distancias);
-            let contenedoresARecolectar = solucion.individuo.slice(1, solucion.individuo.length - 1);
+            let contenedoresARecolectar = solucion.individuo;
             let cantContenedoresxCamion = Math.ceil(contenedoresARecolectar.length / camiones.length);
-            let contenedorActual: number = 1;
+            let contenedorActual: number = 0;
             let listaRutas: ListaRutas[] = [];
             for(let i = 0; i < camiones.length; i++){
                 let secuenciaContenedores: SecuenciaContenedor[] = [];
